@@ -5,6 +5,9 @@
       astyle
       cmake
       cmake-format
+      libwebp
+      libtiff
+      libjpeg
       bash
       curl
       git

@@ -1,5 +1,7 @@
 #include "InputHandler.h"
 
+#include <string>
+#include <exception>
 #include <testing_h/logger.h>
 
 CInputHandler* CInputHandler::s_pInstance = 0;
@@ -24,7 +26,7 @@ void CInputHandler::OnThink()
 		switch (e.type)
 		{
 			case SDL_QUIT:
-				CBaseGame::Instance()->Quit();
+				lprintf(LOG_WARNING, "Quit not implemented yet");
 				break;
 
 			case SDL_JOYAXISMOTION:
@@ -115,7 +117,7 @@ void CInputHandler::InitialiseJoysticks()
 		SDL_JoystickEventState(SDL_ENABLE);
 		m_bJoysticksInitialised = true;
 
-		lprintf("Initialised %d joystick(s)", 
+		lprintf(LOG_INFO, "Initialised %lu joystick(s)", 
 			m_joysticks.size());
 	}
 	else

@@ -4,37 +4,20 @@
 class CObjectParams
 {
 public:
-    // Map Logic overload
-    CObjectParams(float x, float y, const char* script)
-        : m_x(x), m_y(y), m_script(script) {}
-
     CObjectParams(float x, float y)
         : m_x(x), m_y(y) {}
-
-    [[deprecated("Use the setters in the class instead.")]]
-    CObjectParams(float x, float y, int width, int height,
-                  std::string textureID, int animSpeed = 1, int numFrames = 1,
-                  int onClick = 0, int onEnter = 0, int onLeave = 0, std::string script = "",
-                  std::string objN = "", std::string factID = "")
-        : m_x(x), m_y(y), m_width(width), m_height(height),
-          m_textureID(textureID), m_animSpeed(animSpeed), m_numFrames(numFrames),
-          m_OnClick(onClick), m_OnEnter(onEnter), m_OnLeave(onLeave), m_script(script),
-          m_objName(objN), m_factoryID(factID) {}
 
     // Setters
     void SetName(std::string n)
     {
         m_objName = n;
     }
-    void SetFactoryID(std::string n)
-    {
-        m_factoryID = n;
-    }
 
     void SetWidth(int w)
     {
         m_width = w;
     }
+
     void SetHeight(int h)
     {
         m_height = h;
@@ -44,6 +27,7 @@ public:
     {
         m_animSpeed = s;
     }
+
     void SetNumFrames(int n)
     {
         m_numFrames = n;
@@ -53,27 +37,20 @@ public:
     {
         m_OnClick = c;
     }
+
     void SetOnEnter(int c)
     {
         m_OnEnter = c;
     }
+
     void SetOnLeave(int c)
     {
         m_OnLeave = c;
     }
 
-    void SetSoundPath(std::string path)
-    {
-        m_soundPath = path;
-    }
-
     void SetTextureID(std::string id)
     {
         m_textureID = id;
-    }
-    void SetScript(std::string s)
-    {
-        m_script = s;
     }
 
     // Getters
@@ -135,14 +112,9 @@ public:
     {
         return m_textureID;
     }
-    std::string GetScript() const
-    {
-        return m_script;
-    }
 
 private:
     // Metadata + Map Logic
-    std::string m_script = "";
     std::string m_textureID = "";
     std::string m_objName = "";
     std::string m_factoryID = "";
