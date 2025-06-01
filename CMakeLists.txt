@@ -49,7 +49,7 @@ add_definitions("-D__FILENAME__=(&__FILE__[SOURCE_PATH_SIZE])")
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED On)
-set(CMAKE_C_FLAGS "-Wall -Werror -Ofast -march=native ${ABSL_DEFAULT_COPTS} -Wno-ignored-attributes -Wno-maybe-uninitialized")
+set(CMAKE_C_FLAGS "-Wall -Werror -Ofast -march=native ${ABSL_DEFAULT_COPTS} -Wno-ignored-attributes -Wno-maybe-uninitialized -Wno-nonnull")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
