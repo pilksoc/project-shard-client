@@ -15,7 +15,12 @@ static void ws_func(struct mg_connection *c, int ev, void *ev_data) {
     } else if (ev == MG_EV_ERROR) {
         lprintf(LOG_ERROR, "Mongoose error; %p %s\n", c->fd, (char *) ev_data);
     } else if (ev == MG_EV_WS_OPEN) {
-        mg_ws_send(c, "hello", 5, WEBSOCKET_OP_BINARY);
+        for (auto message : client->sendQueue) {
+            mg_ws_send(c, message->ptr, message->len, WEBSOCKET_OP_BINARY);
+            delete message;
+        }
+
+        client->sendQueue.clear();
     } else if (ev == MG_EV_WS_MSG) {
         struct mg_ws_message *wm = (struct mg_ws_message *) ev_data;
         client->recieveQueue.push_back(new Message(wm));
