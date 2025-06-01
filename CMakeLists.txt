@@ -89,6 +89,10 @@ set(PROTOS ./proto/shard_common.proto ./proto/room_state.proto)
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS DESCRIPTORS PROTO_DESCS ${PROTOS})
 
 set(SRC
+    ./vendor/testing_h/ansi_colour.h ./vendor/testing_h/logger.c
+    ./vendor/testing_h/logger.h ./vendor/testing_h/testing.c
+    ./vendor/testing_h/testing.h
+
     ./vendor/testing_h/ansi_colour.h
     ./vendor/testing_h/logger.c
     ./vendor/testing_h/logger.h
@@ -96,12 +100,32 @@ set(SRC
     ./vendor/testing_h/testing.h
     ./vendor/mongoose/mongoose.c
     ./vendor/mongoose/mongoose.h
+
+    ./src/CTexture.h ./src/CTexture.cpp
+    ./src/TextureManager.h ./src/TextureManager.cpp
+    ./src/GameObject.h
+    ./src/GameState.h
+    ./src/GameStateBase.h ./src/GameStateBase.cpp
+    ./src/ObjectParams.h
+    ./src/Vector2D.h)
+
     ${PROTO_SRCS}
     ${PROTO_HDRS})
 
 set(TEST)
 
 set(LIBS mbedtls mbedcrypto mbedx509 pthread ${ABSL_LIBS} ${Protobuf_LIBRARIES})
+
+if (WIIU) 
+  add_subdirectory(./vendor/SDL-wiiu)
+else() 
+  find_package(SDL2 REQUIRED)
+  find_package(SDL2_image REQUIRED)
+  
+  include_directories(project-shard-client ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+
+  set(LIBS ${LIBS} ${SDL2_LIBRARIES} SDL2_image)
+endif()
 
 add_library(project-shard-client-lib OBJECT ${SRC})
 target_link_libraries(project-shard-client-lib PRIVATE ${LIBS})
