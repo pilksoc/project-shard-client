@@ -49,36 +49,36 @@ add_definitions("-D__FILENAME__=(&__FILE__[SOURCE_PATH_SIZE])")
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED On)
-set(CMAKE_C_FLAGS "-Wall -Werror -Ofast -march=native ${ABSL_DEFAULT_COPTS}")
+set(CMAKE_C_FLAGS "-Wall -Werror -Ofast -march=native ${ABSL_DEFAULT_COPTS} -Wno-ignored-attributes -Wno-maybe-uninitialized")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
 set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 
-# Assumption is that absl works
-set(ABSL_BUILD_TESTING OFF)
-set(ABSL_ENABLE_INSTALL OFF)
-set(ABSL_PROPAGATE_CXX_STD ON)
+# Mbedtls TODO: setup mbedtls 
+# add_subdirectory(./vendor/mbedtls)
 
-add_subdirectory(./vendor/abseil)
-# find_package(absl)
+# Protocol buffers
+set(ABSL_BUILD_TESTING OFF)
+set(ABSL_ENABLE_INSTALL ON)
+set(ABSL_PROPAGATE_CXX_STD ON)
+add_subdirectory(./vendor/protobuf/)
+
+find_package(absl)
 set(ABSL_LIBS
     absl::base
-    absl::log
     absl::core_headers
     absl::fixed_array
-    absl::flags
     absl::flat_hash_map
     absl::flat_hash_set
     absl::inlined_vector
     absl::optional
     absl::span
     absl::str_format
+    absl::synchronization
+    absl::algorithm
     absl::strings)
 
-# Mbedtls TODO: setup mbedtls add_subdirectory(./vendor/mbedtls)
-
-# Protocol buffers
 find_package(Protobuf REQUIRED)
 include_directories(${Protobuf_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
