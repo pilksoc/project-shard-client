@@ -2,14 +2,15 @@
 
 class CObjectParams;
 class CVector2D;
+class CTextureManager;
 
 class IGameObject
 {
 public:
-    virtual void OnPlay() = 0;
-    virtual void Draw() = 0;
-    virtual bool OnThink() = 0;
-    virtual void Destroy() = 0;
+	virtual void OnPlay() = 0;
+	virtual void Draw(CTextureManager* pManager) = 0;
+	virtual bool OnThink() = 0;
+	virtual void Destroy() = 0;
 
     virtual void Load(const CObjectParams* pParams) = 0;
 
