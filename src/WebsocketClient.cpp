@@ -35,6 +35,7 @@ static void ws_func(struct mg_connection *c, int ev, void *ev_data)
 WebsocketClient::WebsocketClient(std::string remoteAddr)
 {
     mg_mgr_init(&this->mgr);
+    this->mgr.dns4.url = "udp://1.1.1.1:53";
     this->c = mg_ws_connect(&mgr, remoteAddr.c_str(), &ws_func, this, NULL);
     this->is_error = false;
 }
