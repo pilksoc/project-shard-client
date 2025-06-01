@@ -58,7 +58,10 @@ set(SRC
 
 set(TEST)
 
-set(LIBS crypto mbedtls mbedcrypto mbedx509)
+find_package(SDL2 REQUIRED)
+include_directories(project-shard-client ${SDL2_INCLUDE_DIRS})
+
+set(LIBS crypto mbedtls mbedcrypto mbedx509 ${SDL2_LIBRARIES})
 
 add_library(project-shard-client-lib OBJECT ${SRC})
 target_link_libraries(project-shard-client-lib PRIVATE ${LIBS})
