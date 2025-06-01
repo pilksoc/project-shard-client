@@ -7,9 +7,6 @@
 [submodule "vendor/mongoose"]
 	path = vendor/mongoose
 	url = https://github.com/cesanta/mongoose
-[submodule "vendor/mbedtls"]
-	path = vendor/mbedtls
-	url = https://github.com/Mbed-TLS/mbedtls.git
 [submodule "vendor/protobuf"]
 	path = vendor/protobuf
 	url = https://github.com/protocolbuffers/protobuf

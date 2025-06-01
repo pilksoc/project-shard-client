@@ -41,6 +41,7 @@ add_definitions("-DPSC_OS=\"${CMAKE_SYSTEM_NAME}\"")
 add_definitions("-DPSC_REPO_URL=\"${REPO_URL}\"")
 add_definitions("-DPSC_PROJECT_VERSION=\"${CMAKE_PROJECT_VERSION}\"")
 add_definitions("-DPSC_PROJECT_NAME=\"${CMAKE_PROJECT_NAME}\"")
+add_definitions("-DMG_TLS=MG_TLS_BUILTIN")
 
 # __FILENAME__
 string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
@@ -63,10 +64,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-# Mbedtls
-set(ENABLE_TESTING OFF)
-add_subdirectory(./vendor/mbedtls)
 
 # Use system protoc so that it works with the cross compiler
 function(protobuf_generate_cpp LIBRARY)
@@ -160,7 +157,7 @@ set(SRC
 
 set(TEST)
 
-set(LIBS mbedtls mbedx509 ${ABSL_LIBS} ${Protobuf_LIBRARIES} PROTO_LIB)
+set(LIBS ${Protobuf_LIBRARIES} PROTO_LIB)
 
 if(WIIU)
   add_subdirectory(./vendor/SDL-wiiu)
