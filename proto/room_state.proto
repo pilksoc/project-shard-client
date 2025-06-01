@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+enum RoomType {
+    UNKNOWN_TYPE = 0;
+    LOBBY = 1;
+    GAME = 2;
+}
+
+message RoomStatus {
+    string room_id = 1;
+    string origin_hostname = 2;
+    string friendly_name = 3;
+    int32 num_players = 4;
+    int32 max_players = 5;
+    RoomType room_type = 6;
+    int64 last_update_time = 7;
+}

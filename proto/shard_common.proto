@@ -1,0 +1,178 @@
+syntax = "proto3";
+option go_package = "gitlab.cim.rhul.ac.uk/zkac177/PROJECT/server/pb/shard_common";
+
+import 'room_state.proto';
+
+enum GameStateUpdateType {
+    CLAIM = 0;
+    TEAM_ASSIGNMENT = 1;
+    BOARD_UPDATE = 2;
+}
+
+enum MemberUpdateType {
+    UNKNOWN_UPDATE = 0;
+    JOIN = 1;
+    LEAVE = 2;
+}
+
+enum TeamAssignment {
+    UNASSIGNED = 0;
+    TEAM_1 = 1;
+    TEAM_2 = 2;
+}
+
+message TileRow {
+    repeated TeamAssignment row = 1;
+}
+
+message Player {
+    string id = 1;
+    string username = 2;
+    TeamAssignment team = 3;
+}
+
+message ClientDisconnectEvent {
+    string id = 1;
+    string room_id = 2;
+    string reason = 3;
+}
+
+message RoomPublicState {
+    string room_id = 1;
+    string friendly_name = 2;
+    repeated TileRow board_tiles = 3;
+    repeated Player players = 4;
+    int32 max_players = 5;
+    TeamAssignment team_turn = 6;
+    RoomType room_type = 7;
+    int64 last_update_time = 8;
+}
+
+
+message GameStateUpdateMessage {
+    GameStateUpdateType type = 2;
+
+    oneof message {
+        BoardUpdateType board_update_type = 3;
+        ClaimUpdateType claim_type = 4;
+        TeamAssignmentUpdateType team_assign_type = 5;
+        RoomTypeUpdateType room_type_update_type = 6;
+    }
+
+    message ClaimUpdateType {
+        repeated int32 rows = 6;
+    }
+
+    message TeamAssignmentUpdateType {
+        TeamAssignment room_team = 6;
+    }
+
+    message RoomTypeUpdateType {
+        RoomType old_type = 6;
+        RoomType new_type = 7;
+    }
+
+    message BoardUpdateType {
+        repeated TileRow board_tiles = 6;
+        TeamAssignment team_turn = 7;
+        TeamAssignment winner_team = 8;
+    }
+}
+
+message ClientMsg {
+    string id = 1;
+
+    oneof message {
+        AuthenticationRequest auth_req = 2;
+        GameStateUpdateMessage game_state_req = 3;
+        TextMessageRequest text_msg_req = 4;
+        JoinRoomRequest join_room_req = 5;
+        LeaveRoomRequest leave_room_req = 6;
+        RoomListingRequest room_listing_req = 7;
+        Heartbeat heartbeat = 8;
+    }
+
+    message AuthenticationRequest {
+        string username = 2;
+        bool discovery = 3;
+        string room_id = 4;
+    }
+
+    message TextMessageRequest {
+        string channel = 2;
+        string text = 3;
+    }
+
+    message JoinRoomRequest {
+        string room_id = 2;
+        bool specific_room = 3;
+    }
+    
+    message LeaveRoomRequest {
+        string room_id = 2;
+    }
+
+    message RoomListingRequest {
+        string filter = 2;
+    }
+
+    message Heartbeat {
+        // Intended to keep connection open via Nginx
+    }
+}
+
+message ServerMsg {
+    string id = 1;
+
+    oneof message {
+        AuthenticationResponse auth_resp = 2;
+        ErrorMessage error_msg = 3;
+        GameStateUpdateMessage game_state_resp = 4;
+        UserTextMessage text_msg_resp = 5;
+        RoomMemberUpdateMessage room_member_update_resp = 6;
+        RoomMembershipUpdateMessage room_membership_update_resp = 7;
+        RoomUpdateMessage room_update_resp = 8;
+        RoomListingMessage room_listing_resp = 9;
+        CloseMessage close_resp = 10;
+    }
+
+    message AuthenticationResponse {
+        bool success = 2;
+        string new_id = 3;
+        string reason = 4;
+    }
+
+    message UserTextMessage {
+        string sender_id = 2;
+        string sender_friendlyName = 3;
+        string text = 4;
+    }
+
+    message RoomMemberUpdateMessage {
+        MemberUpdateType operation = 2;
+        string user_id = 3;
+    }
+
+    message RoomUpdateMessage {
+        RoomPublicState room_state = 2;
+    }
+
+    message RoomMembershipUpdateMessage {
+        MemberUpdateType operation = 2;
+        RoomPublicState room_state = 3;
+    }
+
+    message RoomListingMessage {
+        repeated RoomPublicState rooms = 2;
+        repeated RoomStatus ext_rooms = 3;
+        RoomPublicState lobby = 4;
+    }
+
+    message ErrorMessage {
+        string error = 2;
+    }
+
+    message CloseMessage {
+        string reason = 2;
+    }
+}

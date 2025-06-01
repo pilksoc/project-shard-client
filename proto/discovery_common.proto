@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+import 'room_state.proto';
+
+enum ServerResponse {
+    UNKNOWN = 0;
+    SUCCESS = 1;
+    FAILED = 2;
+}
+
+message Server {
+    string hostname = 1;
+    repeated RoomStatus rooms = 2;
+    int32 num_players = 3;
+    int64 last_update_time = 4;
+}
+
+service Discovery {
+    rpc Handshake (ServerHandshakeRequest) returns (ServerHandshakeReply) {} 
+    rpc Listing (RoomListingRequest) returns (RoomListingResponse) {}
+    rpc Update (RoomListingUpdateRequest) returns (RoomListingUpdateResponse) {}
+    rpc Disconnect (ServerDisconnectRequest) returns (ServerDisconnectResponse) {}
+}
+
+message ServerHandshakeRequest {
+    string id = 1;
+    Server metadata = 2;
+}
+
+message ServerHandshakeReply {
+    string id = 1;
+    ServerResponse status = 2;
+    string status_desc = 3;
+}
+
+message RoomListingRequest {
+    string id = 1;
+    string filter = 2;
+}
+
+message RoomListingResponse {
+    string id = 1;
+    ServerResponse status = 2;
+    string status_desc = 3;
+    repeated RoomStatus rooms = 4;
+}
+
+message RoomListingUpdateRequest {
+    string id = 1;
+    Server new_metadata = 2;
+}
+
+message RoomListingUpdateResponse {
+    string id = 1;
+    ServerResponse status = 2;
+    string status_desc = 3;
+}
+
+message ServerDisconnectRequest {
+    string id = 1;
+}
+
+message ServerDisconnectResponse {
+    string id = 1;
+    ServerResponse status = 2;
+    string status_desc = 3;
+}
