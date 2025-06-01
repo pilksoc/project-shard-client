@@ -2,8 +2,7 @@
 #include "TextureManager.h"
 
 CGameObject::CGameObject()
-    : IGameObject(), m_height(0), m_width(0),
-      m_numFrames(1), m_currentFrame(0), m_currentRow(0)
+    : IGameObject()
 {
 }
 
