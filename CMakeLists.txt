@@ -49,44 +49,80 @@ add_definitions("-D__FILENAME__=(&__FILE__[SOURCE_PATH_SIZE])")
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED On)
-set(CMAKE_C_FLAGS "-Wall -Werror -Ofast -march=native ${ABSL_DEFAULT_COPTS} -Wno-ignored-attributes -Wno-maybe-uninitialized -Wno-nonnull")
+set(CMAKE_C_FLAGS
+    "${ABSL_DEFAULT_COPTS} -Ofast -Wall -Werror -Wno-ignored-attributes -Wno-maybe-uninitialized -Wno-nonnull")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
 set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 
-# Mbedtls TODO: setup mbedtls 
-# add_subdirectory(./vendor/mbedtls)
+set(CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
+
+set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+# Mbedtls
+set(ENABLE_TESTING OFF)
+add_subdirectory(./vendor/mbedtls)
+
+# Use system protoc so that it works with the cross compiler
+function(protobuf_generate_cpp LIBRARY)
+  set(PROTOS ${ARGN})
+
+  foreach(proto ${PROTOS})
+    get_filename_component(PROTO_NAME "${proto}" NAME_WE)
+
+    set(PROTO_HEADER "${PROTO_NAME}.pb.h")
+    set(PROTO_SRC "${PROTO_NAME}.pb.cc")
+
+    message(STATUS "Protobuf ${proto} -> ${PROTO_SRC} ${PROTO_HEADER}")
+
+    add_custom_command(
+      OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${PROTO_SRC}"
+             "${CMAKE_CURRENT_BINARY_DIR}/${PROTO_HEADER}"
+      COMMAND protoc ARGS --cpp_out ${CMAKE_CURRENT_BINARY_DIR}
+              -I${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${proto}
+      WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+      DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${proto}"
+      COMMENT "${proto} -> ${PROTO_SRC} ${PROTO_HEADER}")
+
+    list(APPEND SOURCES "${CMAKE_CURRENT_BINARY_DIR}/${PROTO_SRC}")
+    list(APPEND HEADERS "${CMAKE_CURRENT_BINARY_DIR}/${PROTO_HEADER}")
+  endforeach()
+
+  if(MY_PROJECT_SHARED_LIBS)
+    set(libType SHARED)
+  else()
+    set(libType)
+  endif()
+
+  add_library(${LIBRARY} STATIC ${SOURCES} ${HEADERS})
+  target_compile_options(${LIBRARY} PRIVATE -std=c++11)
+  target_link_libraries(${LIBRARY} PUBLIC protobuf)
+  target_include_directories(${LIBRARY} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+endfunction()
 
 # Protocol buffers
-set(ABSL_BUILD_TESTING OFF)
-set(ABSL_ENABLE_INSTALL ON)
-set(ABSL_PROPAGATE_CXX_STD ON)
-add_subdirectory(./vendor/protobuf/)
+set(protobuf_BUILD_LIBPROTOC ON)
+set(protobuf_FORCE_FETCH_DEPENDENCIES ON)
 
-find_package(absl)
-set(ABSL_LIBS
-    absl::base
-    absl::core_headers
-    absl::fixed_array
-    absl::flat_hash_map
-    absl::flat_hash_set
-    absl::inlined_vector
-    absl::optional
-    absl::span
-    absl::str_format
-    absl::synchronization
-    absl::algorithm
-    absl::strings)
-
-find_package(Protobuf REQUIRED)
+find_package(Protobuf CONFIG REQUIRED)
 include_directories(${Protobuf_INCLUDE_DIRS})
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-set(PROTOS ./proto/shard_common.proto ./proto/room_state.proto)
-# protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTOS})
-# protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS EXPORT_MACRO DLL_EXPORT ${PROTOS})
-protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS DESCRIPTORS PROTO_DESCS ${PROTOS})
+add_custom_command(
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/shard_common.proto
+         ${CMAKE_CURRENT_BINARY_DIR}/room_state.proto
+  COMMAND
+    ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/proto/room_state.proto
+    ${CMAKE_CURRENT_BINARY_DIR}/room_state.proto
+  COMMAND
+    ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto/shard_common.proto
+    ${CMAKE_CURRENT_BINARY_DIR}/shard_common.proto)
+
+protobuf_generate_cpp(PROTO_LIB shard_common.proto room_state.proto)
 
 set(SRC
     ./vendor/testing_h/ansi_colour.h
@@ -95,13 +131,17 @@ set(SRC
     ./vendor/testing_h/testing.c
     ./vendor/testing_h/testing.h
     ./vendor/mongoose/mongoose.c
-    ./vendor/mongoose/mongoose.h
-    ${PROTO_SRCS}
-    ${PROTO_HDRS})
+    ./vendor/mongoose/mongoose.h)
 
 set(TEST)
 
-set(LIBS mbedtls mbedcrypto mbedx509 pthread ${ABSL_LIBS} ${Protobuf_LIBRARIES})
+set(LIBS
+    mbedtls
+    mbedx509
+    pthread
+    ${ABSL_LIBS}
+    ${Protobuf_LIBRARIES}
+    PROTO_LIB)
 
 add_library(project-shard-client-lib OBJECT ${SRC})
 target_link_libraries(project-shard-client-lib PRIVATE ${LIBS})
