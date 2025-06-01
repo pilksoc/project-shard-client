@@ -2,6 +2,7 @@
   pkgs.mkShell {    
     nativeBuildInputs = with pkgs.buildPackages; [
       # Build tools
+      astyle
       cmake
       cmake-format
       bash

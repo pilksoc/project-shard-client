@@ -1,6 +1,4 @@
 #pragma once
-#ifndef __GAMESTATEBASE_H__
-#define __GAMESTATEBASE_H__
 
 #include "GameState.h"
 #include <vector>
@@ -13,36 +11,51 @@
 class CTextureManager;
 
 class CGameStateBase :
-	public CGameState
+    public CGameState
 {
 public:
-    CGameStateBase(CTextureManager* pManager) {
+    CGameStateBase(CTextureManager* pManager)
+    {
         pTextureManager = pManager;
     }
 
-	void OnThink() override;
-	void Draw() override;
+    void OnThink() override;
+    void Draw() override;
 
-	bool OnPlay() override;
-	bool OnEnd() override;
+    bool OnPlay() override;
+    bool OnEnd() override;
 
-	virtual std::vector<IGameObject*> GetGameObjects() const { return m_GameObjects; }
-	virtual std::vector<std::string> GetLoadedTextures() const { return m_TextureIDList; }
-	virtual std::vector<std::string> GetLoadedScripts() const { return m_ScriptIDList; }
-	
-	virtual bool ShouldBeTicking() const { return m_shouldTick; }
-	virtual bool ShouldBeDrawing() const { return m_shouldDraw; }
+    virtual std::vector<IGameObject*> GetGameObjects() const
+    {
+        return m_GameObjects;
+    }
+    virtual std::vector<std::string> GetLoadedTextures() const
+    {
+        return m_TextureIDList;
+    }
+    virtual std::vector<std::string> GetLoadedScripts() const
+    {
+        return m_ScriptIDList;
+    }
+
+    virtual bool ShouldBeTicking() const
+    {
+        return m_shouldTick;
+    }
+    virtual bool ShouldBeDrawing() const
+    {
+        return m_shouldDraw;
+    }
 
 protected:
-	std::vector<IGameObject*> m_GameObjects;
-	std::vector<std::string> m_TextureIDList;
-	std::vector<std::string> m_ScriptIDList;
+    std::vector<IGameObject*> m_GameObjects;
+    std::vector<std::string> m_TextureIDList;
+    std::vector<std::string> m_ScriptIDList;
 
-	bool m_shouldTick = false;
-	bool m_shouldDraw = false;
+    bool m_shouldTick = false;
+    bool m_shouldDraw = false;
 
     CTextureManager* pTextureManager = 0;
-	
-	std::string s_UIID;
+
+    std::string s_UIID;
 };
-#endif

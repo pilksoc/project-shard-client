@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iterator>
 #include <SDL.h>
+#include "./WebsocketClient.h"
 
 #define SCREEN_WIDTH    640
 #define SCREEN_HEIGHT   480
@@ -10,9 +11,9 @@ int main(int argc, char **argv)
     std::cerr << "Version: " << PSC_PROJECT_VERSION << std::endl;
     std::cerr << "OS: " << PSC_OS << std::endl;
     std::cerr << PSC_PROJECT_NAME << " - " PSC_PROJECT_VERSION << std::endl;
+    WebsocketClient websocketClient("TODO: change me");
 
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
+    if(SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "SDL could not be initialized!" << std::endl
                   << "SDL_Error: " << SDL_GetError() << std::endl;
         return 0;
@@ -24,22 +25,16 @@ int main(int argc, char **argv)
                                           SDL_WINDOWPOS_UNDEFINED,
                                           SCREEN_WIDTH, SCREEN_HEIGHT,
                                           SDL_WINDOW_SHOWN);
-    if(!window)
-    {
+    if(!window) {
         std::cout << "Window could not be created!" << std::endl
                   << "SDL_Error: " << SDL_GetError() << std::endl;
-    }
-    else
-    {
+    } else {
         // Create renderer
         SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-        if(!renderer)
-        {
+        if(!renderer) {
             std::cout << "Renderer could not be created!" << std::endl
                       << "SDL_Error: " << SDL_GetError() << std::endl;
-        }
-        else
-        {
+        } else {
             // Declare rect of square
             SDL_Rect squareRect;
 
@@ -56,16 +51,14 @@ int main(int argc, char **argv)
             bool quit = false;
 
             // Event loop
-            while(!quit)
-            {
+            while(!quit) {
                 SDL_Event e;
 
                 // Wait indefinitely for the next available event
                 SDL_WaitEvent(&e);
 
                 // User requests quit
-                if(e.type == SDL_QUIT)
-                {
+                if(e.type == SDL_QUIT) {
                     quit = true;
                 }
 

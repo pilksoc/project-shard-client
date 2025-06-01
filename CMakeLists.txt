@@ -147,7 +147,9 @@ set(SRC
     ./src/GameStateBase.h
     ./src/GameStateBase.cpp
     ./src/ObjectParams.h
-    ./src/Vector2D.h)
+    ./src/Vector2D.h
+    ./src/WebsocketClient.h
+    ./src/WebsocketClient.cpp)
 
 set(TEST)
 
@@ -168,8 +170,9 @@ endif()
 add_library(project-shard-client-lib OBJECT ${SRC})
 target_link_libraries(project-shard-client-lib PRIVATE ${LIBS})
 target_include_directories(
-  project-shard-client-lib PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
-                                  ${CMAKE_CURRENT_SOURCE_DIR})
+  project-shard-client-lib
+  PUBLIC ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
+         ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 
 add_executable(project-shard-client ./src/main.cpp)
 target_link_libraries(project-shard-client ${LIBS} project-shard-client-lib)
