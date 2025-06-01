@@ -66,7 +66,7 @@ void CInputHandler::OnThink()
     }
 }
 
-void CInputHandler::Destroy()
+CInputHandler::~CInputHandler()
 {
     if (m_bJoysticksInitialised) {
         for (int i = 0; i < SDL_NumJoysticks(); i++) {

@@ -7,6 +7,10 @@ CGameObject::CGameObject()
 {
 }
 
+CGameObject::~CGameObject()
+{
+}
+
 void CGameObject::Load(const CObjectParams* pParams)
 {
     m_objectName = pParams->GetName();
@@ -47,8 +51,4 @@ bool CGameObject::OnThink()
     m_position += m_velocity;
 
     return true;
-}
-
-void CGameObject::Destroy()
-{
 }

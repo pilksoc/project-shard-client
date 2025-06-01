@@ -1,7 +1,4 @@
 #pragma once
-#ifndef __InputHandler__
-#define __InputHandler__
-
 #include <SDL2/SDL.h>
 #include <vector>
 #include <map>
@@ -21,6 +18,8 @@ struct SInputObject;
 class CInputHandler
 {
 public:
+    ~CInputHandler();
+
     static CInputHandler* Instance()
     {
         if (s_pInstance == 0) {
@@ -31,7 +30,6 @@ public:
     }
 
     void OnThink();
-    void Destroy();
 
     void InitialiseJoysticks();
     bool JoysticksInitialised()
@@ -114,4 +112,3 @@ private:
 
     static CInputHandler* s_pInstance;
 };
-#endif /* defined(__InputHandler__) */

@@ -1,8 +1,4 @@
 #pragma once
-#pragma once
-#ifndef __CGameObject__
-#define __CGameObject__
-
 #include "GameObject.h"
 #include "ObjectParams.h"
 #include "Vector2D.h"
@@ -15,11 +11,11 @@ class CGameObject :
 {
 public:
     CGameObject();
+    ~CGameObject();
 
     void OnPlay() override;
     void Draw(CTextureManager* pManager) override;
     bool OnThink() override;
-    void Destroy() override;
 
     void Load(const CObjectParams* pParams) override;
 
@@ -131,4 +127,3 @@ protected:
     bool m_collidable = false;
     bool m_overlap = false;
 };
-#endif /* defined(__CWarspiteObject__) */

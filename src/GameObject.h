@@ -10,7 +10,6 @@ public:
     virtual void OnPlay() = 0;
     virtual void Draw(CTextureManager* pManager) = 0;
     virtual bool OnThink() = 0;
-    virtual void Destroy() = 0;
 
     virtual void Load(const CObjectParams* pParams) = 0;
 
@@ -21,10 +20,10 @@ public:
 
     virtual bool ShouldCollide() = 0;
     virtual bool ShouldOverlap() = 0;
+    virtual ~IGameObject() {}
 protected:
     friend class IGameObjectDeleter;
     IGameObject() {}
-    virtual ~IGameObject() {}
 };
 
 class IGameObjectDeleter

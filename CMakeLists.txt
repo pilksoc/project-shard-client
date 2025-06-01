@@ -148,6 +148,8 @@ set(SRC
     ./src/TextureManager.h
     ./src/TextureManager.cpp
     ./src/GameObject.h
+    ./src/CGameObject.h
+    ./src/CGameObject.cpp
     ./src/GameState.h
     ./src/GameStateBase.h
     ./src/GameStateBase.cpp

@@ -1,7 +1,4 @@
 #pragma once
-#ifndef __BUTTON_H__
-#define __BUTTON_H__
-
 #include <functional>
 #include "CGameObject.h"
 
@@ -16,7 +13,6 @@ public:
 
     void Draw(CTextureManager* pManager);
     bool OnThink();
-    void Destroy();
 
     void OnClick(ButtonCallback e);
     void OnEnter(ButtonCallback e);
@@ -61,5 +57,3 @@ private:
     int m_onEnterID = 0;
     int m_onLeaveID = 0;
 };
-
-#endif

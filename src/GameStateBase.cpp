@@ -18,7 +18,7 @@ bool CGameStateBase::OnEnd()
 
     // Destroying everything!
     for (size_t i = 0; i < m_GameObjects.size(); i++) {
-        m_GameObjects[i]->Destroy();
+        delete m_GameObjects[i];
     }
 
     for (size_t i = 0; i < m_TextureIDList.size(); i++) {

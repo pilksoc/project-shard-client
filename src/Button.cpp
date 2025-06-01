@@ -77,11 +77,6 @@ bool CButton::onLeave()
     return true;
 }
 
-void CButton::Destroy()
-{
-    CGameObject::Destroy();
-}
-
 void CButton::OnClick(ButtonCallback e)
 {
     m_OnClick = e != 0 ? e : std::bind(&CButton::onClick, this);
