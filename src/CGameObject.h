@@ -114,12 +114,12 @@ protected:
     CVector2D m_velocity;
     CVector2D m_acceleration;
 
-    int m_width;
-    int m_height;
+    int m_width = 0;
+    int m_height = 0;
 
-    int m_currentRow;
-    int m_currentFrame;
-    int m_numFrames;
+    int m_currentRow; = 0
+    int m_currentFrame = 0;
+    int m_numFrames = 1;
 
     std::string m_objectName = "";
     std::string m_textureID = "";
