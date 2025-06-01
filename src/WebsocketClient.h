@@ -24,7 +24,7 @@ public:
 class WebsocketClient
 {
 public:
-    WebsocketClient(std::string remoteAddr);
+    WebsocketClient();
     ~WebsocketClient();
     // To call each frame, non-blocking and returns new messages
     WebsocketCallResponse *Poll();

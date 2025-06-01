@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 
     state_t state = {};
     memset(&state, 0, sizeof(state));
-    state.wsClient = new WebsocketClient("ws://project-shard.leonic.co.uk/ws");
+    state.wsClient = new WebsocketClient();
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "SDL could not be initialized!" << std::endl
