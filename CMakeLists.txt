@@ -47,18 +47,57 @@ string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
 add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
 add_definitions("-D__FILENAME__=(&__FILE__[SOURCE_PATH_SIZE])")
 
-set(CMAKE_C_FLAGS
-    "-Wpedantic -Werror -Wno-unused-parameter -Wno-overlength-strings -Ofast -march=native  -Wno-deprecated-declarations -Wno-strict-prototypes -Wno-newline-eof"
-)
+# Assumption is that absl works
+set(ABSL_BUILD_TESTING OFF)
+set(ABSL_PROPAGATE_CXX_STD ON)
+set(ABSL_ENABLE_INSTALL ON)
+
+add_subdirectory(./vendor/abseil)
+# find_package(absl)
+set(ABSL_LIBS
+    absl::base
+    absl::core_headers
+    absl::fixed_array
+    absl::flags
+    absl::flat_hash_map
+    absl::flat_hash_set
+    absl::inlined_vector
+    absl::optional
+    absl::span
+    absl::str_format
+    absl::strings)
+
+# Mbedtls TODO: setup mbedtls add_subdirectory(./vendor/mbedtls)
+
+# Protocol buffers
+find_package(Protobuf REQUIRED)
+include_directories(${Protobuf_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+set(PROTOS ./proto/shard_common.proto ./proto/room_state.proto)
+# protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTOS})
+# protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS EXPORT_MACRO DLL_EXPORT ${PROTOS})
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS DESCRIPTORS PROTO_DESCS ${PROTOS})
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_C_FLAGS "-Wpedantic -Werror -Ofast -march=native")
+set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 
 set(SRC
-    ./vendor/testing_h/ansi_colour.h ./vendor/testing_h/logger.c
-    ./vendor/testing_h/logger.h ./vendor/testing_h/testing.c
-    ./vendor/testing_h/testing.h)
+    ./vendor/testing_h/ansi_colour.h
+    ./vendor/testing_h/logger.c
+    ./vendor/testing_h/logger.h
+    ./vendor/testing_h/testing.c
+    ./vendor/testing_h/testing.h
+    ./vendor/mongoose/mongoose.c
+    ./vendor/mongoose/mongoose.h
+    ${PROTO_SRCS}
+    ${PROTO_HDRS})
 
 set(TEST)
 
-set(LIBS crypto mbedtls mbedcrypto mbedx509)
+set(LIBS mbedtls mbedcrypto mbedx509 pthread ${ABSL_LIBS} ${Protobuf_LIBRARIES})
 
 add_library(project-shard-client-lib OBJECT ${SRC})
 target_link_libraries(project-shard-client-lib PRIVATE ${LIBS})
