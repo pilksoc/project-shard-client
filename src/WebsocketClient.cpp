@@ -3,7 +3,8 @@
 #include <testing_h/logger.h>
 #include <stdexcept>
 
-static void ws_func(struct mg_connection *c, int ev, void *ev_data) {
+static void ws_func(struct mg_connection *c, int ev, void *ev_data)
+{
     WebsocketClient *client = (WebsocketClient *) c->fn_data;
 
     if (ev == MG_EV_OPEN) {

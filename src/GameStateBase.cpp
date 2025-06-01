@@ -43,8 +43,7 @@ void CGameStateBase::Draw(CTextureManager* pManager)
 {
     if (!m_shouldDraw) return;
 
-	for (size_t i = 0; i < m_GameObjects.size(); i++)
-	{
-		m_GameObjects[i]->Draw(pManager);
-	}
+    for (size_t i = 0; i < m_GameObjects.size(); i++) {
+        m_GameObjects[i]->Draw(pManager);
+    }
 }

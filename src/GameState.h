@@ -9,11 +9,11 @@ class CTextureManager;
 class CGameState
 {
 public:
-	virtual void OnThink() = 0;
-	virtual void Draw(CTextureManager* pManager) = 0;
-	
-	virtual bool OnPlay() = 0;
-	virtual bool OnEnd() = 0;
+    virtual void OnThink() = 0;
+    virtual void Draw(CTextureManager* pManager) = 0;
+
+    virtual bool OnPlay() = 0;
+    virtual bool OnEnd() = 0;
 
     virtual bool OnPlay() = 0;
     virtual bool OnEnd() = 0;
