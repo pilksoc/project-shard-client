@@ -47,15 +47,24 @@ string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
 add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
 add_definitions("-D__FILENAME__=(&__FILE__[SOURCE_PATH_SIZE])")
 
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED On)
+set(CMAKE_C_FLAGS "-Wall -Werror -Ofast -march=native ${ABSL_DEFAULT_COPTS}")
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED On)
+set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
+
 # Assumption is that absl works
 set(ABSL_BUILD_TESTING OFF)
+set(ABSL_ENABLE_INSTALL OFF)
 set(ABSL_PROPAGATE_CXX_STD ON)
-set(ABSL_ENABLE_INSTALL ON)
 
 add_subdirectory(./vendor/abseil)
 # find_package(absl)
 set(ABSL_LIBS
     absl::base
+    absl::log
     absl::core_headers
     absl::fixed_array
     absl::flags
@@ -78,11 +87,6 @@ set(PROTOS ./proto/shard_common.proto ./proto/room_state.proto)
 # protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTOS})
 # protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS EXPORT_MACRO DLL_EXPORT ${PROTOS})
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS DESCRIPTORS PROTO_DESCS ${PROTOS})
-
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_C_FLAGS "-Wpedantic -Werror -Ofast -march=native")
-set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 
 set(SRC
     ./vendor/testing_h/ansi_colour.h
