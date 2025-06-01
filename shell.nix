@@ -10,6 +10,8 @@
       valgrind
       gdb
       protobuf_21
+      SDL2
+      SDL2_image
 
       # used in mbedtls build
       python312

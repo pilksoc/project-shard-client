@@ -50,7 +50,8 @@ add_definitions("-D__FILENAME__=(&__FILE__[SOURCE_PATH_SIZE])")
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED On)
 set(CMAKE_C_FLAGS
-    "${ABSL_DEFAULT_COPTS} -Ofast -Wall -Werror -Wno-ignored-attributes -Wno-maybe-uninitialized -Wno-nonnull")
+    "${ABSL_DEFAULT_COPTS} -Ofast -Wall -Werror -Wno-ignored-attributes -Wno-maybe-uninitialized -Wno-nonnull"
+)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
@@ -130,18 +131,39 @@ set(SRC
     ./vendor/testing_h/logger.h
     ./vendor/testing_h/testing.c
     ./vendor/testing_h/testing.h
+    ./vendor/testing_h/ansi_colour.h
+    ./vendor/testing_h/logger.c
+    ./vendor/testing_h/logger.h
+    ./vendor/testing_h/testing.c
+    ./vendor/testing_h/testing.h
     ./vendor/mongoose/mongoose.c
-    ./vendor/mongoose/mongoose.h)
+    ./vendor/mongoose/mongoose.h
+    ./src/CTexture.h
+    ./src/CTexture.cpp
+    ./src/TextureManager.h
+    ./src/TextureManager.cpp
+    ./src/GameObject.h
+    ./src/GameState.h
+    ./src/GameStateBase.h
+    ./src/GameStateBase.cpp
+    ./src/ObjectParams.h
+    ./src/Vector2D.h)
 
 set(TEST)
 
-set(LIBS
-    mbedtls
-    mbedx509
-    pthread
-    ${ABSL_LIBS}
-    ${Protobuf_LIBRARIES}
-    PROTO_LIB)
+set(LIBS mbedtls mbedx509 pthread ${ABSL_LIBS} ${Protobuf_LIBRARIES} PROTO_LIB)
+
+if(WIIU)
+  add_subdirectory(./vendor/SDL-wiiu)
+else()
+  find_package(SDL2 REQUIRED)
+  find_package(SDL2_image REQUIRED)
+
+  include_directories(project-shard-client ${SDL2_INCLUDE_DIRS}
+                      ${SDL2_IMAGE_INCLUDE_DIRS})
+
+  set(LIBS ${LIBS} ${SDL2_LIBRARIES} SDL2_image)
+endif()
 
 add_library(project-shard-client-lib OBJECT ${SRC})
 target_link_libraries(project-shard-client-lib PRIVATE ${LIBS})
