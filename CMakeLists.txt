@@ -55,6 +55,9 @@ set(SRC
     ./vendor/testing_h/ansi_colour.h ./vendor/testing_h/logger.c
     ./vendor/testing_h/logger.h ./vendor/testing_h/testing.c
     ./vendor/testing_h/testing.h
+
+    ./src/CTexture.h ./src/CTexture.cpp
+    ./src/TextureManager.h ./src/TextureManager.cpp
     ./src/GameObject.h
     ./src/GameState.h
     ./src/GameStateBase.h ./src/GameStateBase.cpp
@@ -64,9 +67,10 @@ set(SRC
 set(TEST)
 
 find_package(SDL2 REQUIRED)
-include_directories(project-shard-client ${SDL2_INCLUDE_DIRS})
+find_package(SDL2_image REQUIRED)
+include_directories(project-shard-client ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
 
-set(LIBS crypto mbedtls mbedcrypto mbedx509 ${SDL2_LIBRARIES})
+set(LIBS crypto mbedtls mbedcrypto mbedx509 ${SDL2_LIBRARIES} SDL2_image)
 
 add_library(project-shard-client-lib OBJECT ${SRC})
 target_link_libraries(project-shard-client-lib PRIVATE ${LIBS})
