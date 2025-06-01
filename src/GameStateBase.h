@@ -10,10 +10,16 @@
 #define SID_BROWSER "ServerBrowser"
 #define SID_GAME "GameState"
 
+class CTextureManager;
+
 class CGameStateBase :
 	public CGameState
 {
 public:
+    CGameStateBase(CTextureManager* pManager) {
+        pTextureManager = pManager;
+    }
+
 	void OnThink() override;
 	void Draw() override;
 
@@ -26,7 +32,7 @@ public:
 	
 	virtual bool ShouldBeTicking() const { return m_shouldTick; }
 	virtual bool ShouldBeDrawing() const { return m_shouldDraw; }
-	
+
 protected:
 	std::vector<IGameObject*> m_GameObjects;
 	std::vector<std::string> m_TextureIDList;
@@ -34,6 +40,8 @@ protected:
 
 	bool m_shouldTick = false;
 	bool m_shouldDraw = false;
+
+    CTextureManager* pTextureManager = 0;
 	
 	std::string s_UIID;
 };
