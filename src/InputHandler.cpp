@@ -195,7 +195,7 @@ void CInputHandler::onKeyDown()
 
         for (it = m_keyDownCallbacks.begin(); it != m_keyDownCallbacks.end(); it++) {
             if (m_keystates[it->first] == 1
-                    && m_keyReleased[it->first] == true) {
+            && m_keyReleased[it->first] == true) {
                 m_keyReleased[it->first] = false;
 
                 try {
@@ -218,7 +218,7 @@ void CInputHandler::onKeyUp()
 
         for (it = m_keyUpCallbacks.begin(); it != m_keyUpCallbacks.end(); it++) {
             if (m_keystates[it->first] == 0
-                    && m_keyReleased[it->first] == false) {
+            && m_keyReleased[it->first] == false) {
                 m_keyReleased[it->first] = true;
 
                 try {
