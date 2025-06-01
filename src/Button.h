@@ -12,15 +12,15 @@ protected:
 public:
     CButton();
 
-    virtual void Load(const CObjectParams* pParams);
+    void Load(const CObjectParams* pParams);
 
-    virtual void Draw(CTextureManager* pManager);
-    virtual bool OnThink();
-    virtual void Destroy();
+    void Draw(CTextureManager* pManager);
+    bool OnThink();
+    void Destroy();
 
-    virtual void OnClick(ButtonCallback e);
-    virtual void OnEnter(ButtonCallback e);
-    virtual void OnLeave(ButtonCallback e);
+    void OnClick(ButtonCallback e);
+    void OnEnter(ButtonCallback e);
+    void OnLeave(ButtonCallback e);
 
     int GetOnClickID() const
     {
@@ -49,9 +49,9 @@ private:
 
 protected:
     // Initial values for callbacks
-    virtual bool onClick();
-    virtual bool onEnter();
-    virtual bool onLeave();
+    bool onClick();
+    bool onEnter();
+    bool onLeave();
 
 private:
     // Whether the button has been released or not.
