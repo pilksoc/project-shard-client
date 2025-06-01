@@ -11,7 +11,7 @@ int main(int argc, char **argv)
     std::cerr << "Version: " << PSC_PROJECT_VERSION << std::endl;
     std::cerr << "OS: " << PSC_OS << std::endl;
     std::cerr << PSC_PROJECT_NAME << " - " PSC_PROJECT_VERSION << std::endl;
-    WebsocketClient websocketClient("TODO: change me");
+    WebsocketClient websocketClient("http://project-shard.leonic.moe/ws");
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "SDL could not be initialized!" << std::endl

@@ -153,7 +153,7 @@ set(SRC
 
 set(TEST)
 
-set(LIBS mbedtls mbedx509 pthread ${ABSL_LIBS} ${Protobuf_LIBRARIES} PROTO_LIB)
+set(LIBS mbedtls mbedx509 ${ABSL_LIBS} ${Protobuf_LIBRARIES} PROTO_LIB)
 
 if(WIIU)
   add_subdirectory(./vendor/SDL-wiiu)
