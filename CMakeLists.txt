@@ -54,7 +54,12 @@ set(CMAKE_C_FLAGS
 set(SRC
     ./vendor/testing_h/ansi_colour.h ./vendor/testing_h/logger.c
     ./vendor/testing_h/logger.h ./vendor/testing_h/testing.c
-    ./vendor/testing_h/testing.h)
+    ./vendor/testing_h/testing.h
+    ./src/GameObject.h
+    ./src/GameState.h
+    ./src/GameStateBase.h ./src/GameStateBase.cpp
+    ./src/ObjectParams.h
+    ./src/Vector2D.h)
 
 set(TEST)
 
