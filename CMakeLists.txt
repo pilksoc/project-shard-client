@@ -138,8 +138,13 @@ set(SRC
     ./vendor/testing_h/testing.h
     ./vendor/mongoose/mongoose.c
     ./vendor/mongoose/mongoose.h
+    ./src/Button.h
+    ./src/Button.cpp
     ./src/CTexture.h
     ./src/CTexture.cpp
+    ./src/EngineTypes.h
+    ./src/InputHandler.h
+    ./src/InputHandler.cpp
     ./src/TextureManager.h
     ./src/TextureManager.cpp
     ./src/GameObject.h
