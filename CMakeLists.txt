@@ -113,7 +113,7 @@ add_custom_command(
   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/shard_common.proto
          ${CMAKE_CURRENT_BINARY_DIR}/room_state.proto
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/proto/shard_common.proto
-          ${CMAKE_CURRENT_BINARY_DIR}/shard_common.proto
+          ${CMAKE_CURRENT_SOURCE_DIR}/proto/shard_common.proto
   COMMAND
     ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/proto/room_state.proto
     ${CMAKE_CURRENT_BINARY_DIR}/room_state.proto
